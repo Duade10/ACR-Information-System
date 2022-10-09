@@ -1,0 +1,13 @@
+    {% csrf_token %}
+    
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <span class="text-red-700 font-medium text-sm">{{error}}</span> 
+        {% endfor %}
+    {% endif %}
+    
+    {% for field in form %}
+        {% include 'forms/post/form_input.html' with field=field %}
+    {% endfor %}
+    
+    <button class="btn btn-success btn-block text-white">{{cta}}</button>

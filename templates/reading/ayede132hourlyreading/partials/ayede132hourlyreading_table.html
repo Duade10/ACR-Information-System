@@ -1,0 +1,39 @@
+<tr>
+    <td>
+        <div class="sort-handler">
+            <i class="fas fa-th"></i>
+        </div>
+    </td>
+    {% if '/ayede-reading-sheet-hourly-reading/' not in request.path %}
+    <td><input name="readings" type="checkbox" value={{hr.pk}}></td>
+    {% endif %}
+    <td class="w-auto">{% if today.day is hr.created.day and today.month is hr.created.month %} Today {% else %} {{hr.created.date}} {% endif %}</td>
+    <td>{{hr.frequency}}</td>
+    <td>{{hr.hour}}</td>
+    <td>{{hr.iwo_iseyin_kv}} | {{hr.iwo_iseyin_a}} | {{hr.iwo_iseyin_mw}} | {{hr.iwo_iseyin_mvar}}</td>
+    <td class="bg-dark text-white">{{hr.jericho_kv}} | {{hr.jericho_a}} | {{hr.jericho_mw}} | {{hr.jericho_mvar}}</td>
+    <td>{{hr.mcpherson_kv}} | {{hr.mcpherson_a}} | {{hr.mcpherson_mw}} | {{hr.mcpherson_mvar}}</td>
+    <td class="bg-dark text-white">{{hr.t1_kv}} | {{hr.t1_a}} | {{hr.t1_mw}} | {{hr.t1_mvar}}</td>
+    <td>{{hr.t2_kv}} | {{hr.t2_a}} | {{hr.t2_mw}} | {{hr.t2_mvar}}</td>
+    <td class="bg-dark text-white">{{hr.t3_kv}} | {{hr.t3_a}} | {{hr.t3_mw}} | {{hr.t3_mvar}}</td>
+    <td>{{hr.total_load_mw}} | {{hr.total_load_mvar}}</td>
+    <td class="bg-dark text-white">{{hr.oluyole}}</td>
+    <td>{{hr.express}}</td>
+    <td class="bg-dark text-white">{{hr.liberty}}</td>
+    <td>{{hr.industrial}}</td>
+    <td class="bg-dark text-white">{{hr.interchange}}</td>
+    <td>{{hr.iyaganku}}</td>
+    <td class="bg-dark text-white">{{hr.apata}}</td>
+    <td>{{hr.eleyele}}</td>
+    <td class="bg-dark text-white">{{hr.lanlate}}</td>
+    <td><a class="btn btn-secondary btn-sm" href="{% url 'ayede132hourlyreadings:update' hr.pk %}">Edit </a></td>
+    {% if '/ayede-reading-sheet-hourly-reading/' not in request.path %} {% if hr.is_uploaded %} {% if forloop.last %}
+    <td><a href="{% url 'ayede132hourlyreadings:clear' hr.pk %}" class="btn btn-success btn-sm text-white" id="swal-5">Clear</a></td>
+    {% else %}
+    <td><a class="btn btn-success btn-sm text-white" id="swal-5">Uploaded</a></td>
+    {% endif %} {% else %}
+    <td><a class="btn btn-warning btn-sm text-white" data-confirm="Upload?| Hour: {{hr.hour}}, Day: {{hr.created.day}}, Year: {{hr.created.year}}" data-confirm-yes="Ayede132HourlyUploadSingleReading({{hr.pk}})">Upload</a></td>
+    {% endif %}
+    <td><a class="btn btn-danger btn-sm text-white" data-confirm="Really?|This process cannot be undone?" data-confirm-yes="window.location.replace('{{hr.get_delete_url}}')">Delete</a></td>
+    {% endif %}
+</tr>

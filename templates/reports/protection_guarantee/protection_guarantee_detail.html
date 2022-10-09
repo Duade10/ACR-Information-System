@@ -1,0 +1,131 @@
+{% extends 'base-0.html' %}
+{% load static %}
+{% block css %}
+  <link rel="stylesheet" href="{% static 'assets/modules/bootstrap-social/bootstrap-social.css' %}">
+{% endblock css %}
+{% block title %} Application For Protection Guarantee - {{single_protection_guarantee.number}} by {{single_protection_guarantee.user.get_full_name}} at {{single_trouble_report.created_at}} {% endblock title %}
+{% block content %}
+
+
+  <div class="section-body container">
+    <div class="panel panel-default plain mt-5" id="dash_0">
+        <!-- Start .panel -->
+        <div class="panel-body p30">
+            <div class="row">
+                <!-- Start .row -->
+                <div class="col-lg-6">
+                    <!-- col-lg-6 start here -->
+                    <h2 style="font-family: sans-serif;">Application For Protection Guarantee (OF1)</h2>
+                    <hr />
+                    {% if single_protection_guarantee.applied_to_132 %}
+                    <h3>{{single_protection_guarantee.applied_to_132}}</h3>
+                    {% elif  single_trouble_report.applied_to_330 %}
+                    <h3>{{single_protection_guarantee.applied_to_330}}</h3>
+                    {% endif %}
+                </div>
+                <!-- col-lg-6 end here -->
+                <div class="col-lg-6">
+                    <!-- col-lg-6 start here -->
+                    <div class="invoice-from">
+                        <ul class="list-unstyled text-right">
+                            <li><strong>I apply to:</strong></li>
+                            {% if single_protection_guarantee.applied_to_132 %}
+                            <li>{{single_protection_guarantee.applied_to_132}}</li>
+                            {% elif single_protection_guarantee.applied_to_330 %}
+                            <li>{{single_protection_guarantee.applied_to_330}}</li>
+                            {% endif %}
+                            <li><strong>For a :</strong></li>
+                            <li>{{single_protection_guarantee.for_a|upper}}</li>
+                            <li><strong>To be Issued To:</strong></li>
+                            <li>{{single_protection_guarantee.to_be_issued_to|upper}} </li>
+                            <li><strong>Title :</strong></li>
+                            <li>{{single_protection_guarantee.title|upper}}</li>
+                            <li><strong>Department :</strong></li>
+                            <li>{{single_protection_guarantee.department|upper}}</li>
+                            <li><strong>To be Issued:</strong></li>
+                            <li>{{single_protection_guarantee.to_be_issued}} </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- col-lg-6 end here -->
+                <div class="col-lg-12">
+                    <!-- col-lg-12 start here -->
+                    <div class="invoice-details mt25">
+                        <div class="well">
+                            <ul class="list-unstyled mb0">
+                                <li><strong>To Be Issued At:</strong> {{single_protection_guarantee.to_be_issued_at}}</li>
+                                <li><strong>To Be Surrendered:</strong> {{single_protection_guarantee.to_be_surrendered_at}}</li>
+                                <li><strong>Working Time:</strong> {{single_protection_guarantee.working_time}}</li>
+                                <li><strong>Switching Time:</strong> {{single_protection_guarantee.switching_time}}</li>
+
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card shadow-0">
+                        <div class="card-body border shadow-0">
+                            <h6 class="card-title">Description of apparatus:</h6>
+                            <p class="card-text">{{single_protection_guarantee.description_of_apparatus|safe}}</p>
+                        </div>
+                    </div>
+                    <div class="card shadow-0">
+                        <div class="card-body border">
+                            <h5 class="card-title">Description Of Trouble:</h5>
+                            <p class="card-text">{{single_protection_guarantee.additional_apparatus|safe}}</p>
+                        </div>
+                    </div>
+                    <div class="card border-0 shadow-0">
+                        <div class="card-body border">
+                            <h5 class="card-title">Description Of Switching:</h5>
+                            <p class="card-text">{{single_protection_guarantee.description_of_switching|safe}}</p>
+                        </div>
+                    </div>  
+                    <div class="card">
+                        <div class="card-body border">
+                         <div class="row">
+                             <div class="col">
+                                <strong>Advance Request By:</strong> {{ single_protection_guarantee.advance_request_name }}
+                             </div>
+                             <div class="col">
+                                <strong>Received By:</strong> {{ single_protection_guarantee.received_by_name }}
+                             </div>
+                             <div class="col">
+                                <strong>Notes: Re-Outage</strong> About {{ single_protection_guarantee.outage }} MW will be interrupted
+                             </div>
+                         </div>
+                        </div>
+                      </div>    
+
+
+                    <div class="card">
+                        <div class="card-body border">
+                         <div class="row">
+                             <div class="col">
+                                <strong>Apparatus Outage:</strong> {{ single_protection_guarantee.apparatus_outage }}
+                             </div>
+                             <div class="col">
+                                <strong>To:</strong> {{ single_protection_guarantee.apparatus_outage_to }}
+                             </div>
+                             <div class="col">
+                                <strong>Notes: Re-Outage</strong> About {{ single_protection_guarantee.outage }} MW will be interrupted
+                             </div>
+                         </div>
+                        </div>
+                      </div>    
+
+
+                    <button onclick="window.print()" class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
+
+                    <!-- col-lg-12 end here -->
+                </div>
+                <!-- End .row -->
+            </div>
+        </div>
+        <!-- End .panel -->
+    </div>
+  </div>
+{% block js %}
+<script src="{% static 'assets/modules/owlcarousel2/dist/owl.carousel.min.js' %}"></script>
+<script src="{% static 'assets/js/page/components-user.js' %}"></script>
+
+{% endblock js %}
+{% endblock content %}

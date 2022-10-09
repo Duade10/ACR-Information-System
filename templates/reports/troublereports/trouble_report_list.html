@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/modules/datatables/datatables.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css' %}">
+{% endblock css %}
+{% block title %} Trouble Report OF19 {% endblock title %}
+{% block content %}
+
+
+<div class="section-header">
+    <h1>Trouble Report OF19</h1>
+    <div class="section-header-button ml-auto">
+      <a href="{% url 'troublereports:create' %}" class="btn btn-primary">Add New</a>
+    </div>
+  </div>
+  <div class="section-body">
+    <h2 class="section-title">Trouble Reports</h2>
+    <p class="section-lead">
+      You can manage all Trouble Reports, such as editing, deleting and more.
+    </p>
+
+    <div class="row">
+      <div class="col-12">
+        <div class="card mb-0">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 col-sm-12 col-lg-8">
+                <ul class="nav nav-pills" id="myTab3" role="tablist">
+                  <li class="nav-item">
+                    <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#all" role="tab" aria-controls="home" aria-selected="true">All <span class="badge badge-white">{{all_reports_count}}</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#acknowledged" role="tab" aria-controls="profile" aria-selected="false">Acknowledged <span class="badge badge-primary">{{acknowledged_reports_count}}</span></a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#unacknowledged" role="tab" aria-controls="contact" aria-selected="false">Unacknowledged <span class="badge badge-primary">{{unacknowledged_reports_count}}</span></a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-md-12 col-sm-12 col-lg-4 ml-auto">
+                <form action="{% url 'troublereports:search' %}" class="search" method="GET">
+                  <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search Database" name="keyword">
+                    <div class="input-group-append">
+                      <button class="btn btn-primary" type="submit">
+                        <i class="fa fa-search"></i>
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-4">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header">
+            <h4>Trouble Reports</h4>
+          </div>
+          <div class="card-body">
+            <div class="clearfix mb-3"></div>
+            <div class="tab-content" id="myTabContent2">
+              <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="home-tab3">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="table-2">
+                    <thead>
+                      <tr>
+                        <th class="text-center">
+                          <div class="custom-checkbox custom-control">
+                            <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                          </div>
+                        </th>
+                        <th>Number</th>
+                        <th>Apparatus In Trouble</th>
+                        <th>Operator</th>
+                        <th>Name</th>
+                        <th>Due Date</th>
+                        {% if user.station_132 == single_station or user.station_330 == single_station or user.station_330 == single_station.station_330 %}
+                        <th>Status</th>
+                        {% endif %}
+                      </tr>
+                    </thead>
+                    <tbody  id="trouble-reports">
+                      {% for report in reports %}
+                      {% include 'reports/troublereports/partials/trouble_report_table.html' with reports=reports %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="acknowledged" role="tabpanel" aria-labelledby="profile-tab3">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="table-2">
+                    <thead>
+                      <tr>
+                        <th class="text-center">
+                          <div class="custom-checkbox custom-control">
+                            <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                          </div>
+                        </th>
+                        <th>Number</th>
+                        <th>Apparatus In Trouble</th>
+                        <th>Operator</th>
+                        <th>Name</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="trouble-reports">
+                      {% for report in reports %}
+                      {% if report.acknowledged %}
+                      {% include 'reports/troublereports/partials/trouble_report_table.html' with report=report %}
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="unacknowledged" role="tabpanel" aria-labelledby="contact-tab3">
+                <div class="table-responsive">
+                  <table class="table table-striped" id="table-2">
+                    <thead>
+                      <tr>
+                        <th class="text-center">
+                          <div class="custom-checkbox custom-control">
+                            <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                          </div>
+                        </th>
+                        <th>Number</th>
+                        <th>Apparatus In Trouble</th>
+                        <th>Operator</th>
+                        <th>Name</th>
+                        <th>Due Date</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="trouble-reports">
+                      {% for report in reports %}
+                      {% if not report.acknowledged %}
+                      {% include 'reports/troublereports/partials/trouble_report_table.html' with report=report %}
+                      {% endif %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <nav aria-label="...">
+          {% if reports.has_other_pages %}
+          <ul class="pagination">
+            {% if reports.has_previous %}
+            {% for r in reports.paginator.page_range %}
+            {% if forloop.first %}
+            <li class="page-item active"><a class="page-link" href="?page={{r}}"><<</a></li>
+            {% endif %}
+            {% endfor %}
+            <li class="page-item"><a class="page-link" href="?page={{ reports.previous_page_number }}">Previous</a></li>
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+            {% endif %}
+            {% for i in reports.paginator.page_range %}
+            {% if reports.number == i %}
+            <li class="page-item active"><a class="page-link text-muted text-disabled" >{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if reports.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ reports.next_page_number|add:'1'}}">
+                {{reports.next_page_number|add:"1" }}</a></li>
+            <li class="page-item"><a class="page-link" href="?page={{ reports.next_page_number }}">Next</a></li>
+            {% for r in reports.paginator.page_range %}
+            {% if forloop.last %}
+            <li class="page-item active"><a class="page-link" href="?page={{r}}">>></a></li>
+            {% endif %}
+            {% endfor %}
+            {% else %}
+            <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+            {% endif %}
+          </ul>
+          {% endif %}
+        </nav>
+      </div>
+    </div>
+  </div>
+{% block js %}
+<script src="{% static 'assets/modules/tooltip.js' %}"></script>
+<script src="{% static 'assets/modules/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js' %}"></script>
+<script src="{% static 'assets/modules/jquery-ui/jquery-ui.min.js' %}"></script>
+<script src="{% static 'assets/js/page/modules-datatables.js' %}"></script>
+{% endblock js %}
+{% endblock content %}

@@ -1,0 +1,115 @@
+
+            <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">I apply to{% if user.designation == '132' %} {{user.station_132}} {% else %} {{user.station_330}} {% endif %} for a:</label>
+                <div class="col-sm-12 col-md-7">
+                {{form.for_a}}
+               {{form.for_a.errors}}
+                    
+                </div>
+            </div>
+             
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">At:</label>
+              <div class="col-sm-12 col-md-7">
+                {{form.to_be_issued}}
+                {{form.to_be_issued.errors}}
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">To be issued to:</label>
+                <div class="col-sm-12 col-md-7">
+                  {{form.to_be_issued_to}}
+                  {{form.to_be_issued_to.errors}}
+                </div>
+            </div> 
+            <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Title:</label>
+                <div class="col-sm-12 col-md-7">
+                  {{form.title}}
+                  {{form.title.errors}}
+                </div>
+            </div> 
+            <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Department:</label>
+                <div class="col-sm-12 col-md-7">
+                  {{form.department}}
+                {{form.department.errors}}
+                </div>
+            </div> 
+
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">To be issued at:</label>
+              <div class="col-sm-12 col-md-7">
+                {{form.to_be_issued_at}}
+                {{form.to_be_issued_at.errors}}
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">To be surrendered at:</label>
+              <div class="col-sm-12 col-md-7">
+                {{form.to_be_surrendered_at}}
+                {{form.to_be_surrendered_at.errors}}
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Description of apparatus, work, test and any dangers unknown to the issuer:</label>
+              <div class="col-sm-12 col-md-7">
+                {{form.description_of_apparatus}}
+                {{form.description_of_apparatus.errors}}
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Additonal apparatus for safe working space:</label>
+              <div class="col-sm-12 col-md-7">
+                {{form.additional_apparatus}}
+                {{form.additional_apparatus.errors}}
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Notes: Re Outage:</label>
+              <div class="col-sm-12 col-md-7">
+                {{form.outage}}
+                {{form.outage.errors}}
+              </div>
+            </div>
+            <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Switching Time:</label>
+                <div class="col-sm-12 col-md-7">
+                    {{form.switching_time}}
+                    {{form.switching_time.errors}}
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Apparatus outage:</label>
+                <div class="col-sm-12 col-md-7">
+                    {{form.apparatus_outage}}
+                    {{form.apparatus_outage.errors}}
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Apparatus outage to:</label>
+                <div class="col-sm-12 col-md-7">
+                    {{form.apparatus_outage_to}}
+                    {{form.apparatus_outage_to.errors}}
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Final approval:</label>
+                <div class="col-sm-12 col-md-7">
+                    {{form.final_approval_name}}
+                    {{form.final_approval_name.errors}}
+                </div>
+              </div>
+              <div class="form-group row mb-4">
+                <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3">Final approval date:</label>
+                <div class="col-sm-12 col-md-7">
+                    {{form.final_approval_at}}
+                    {{form.final_approval_at.errors}}
+                </div>
+              </div>
+            <div class="form-group row mb-4">
+              <label class="col-form-label text-md-right col-12 col-md-3 col-lg-3"></label>
+              <div class="col-sm-12 col-md-7">
+                <button type="submit" class="btn btn-primary">{{cta}}</button>
+              </div>
+            </div>

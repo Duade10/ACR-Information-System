@@ -1,0 +1,135 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="section-header">
+    <h1>Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12" id="last-load">
+        {% include 'core/partials/last_load.html' %}
+    </div>
+    <div class="col-lg-6 col-md-8 col-sm-8 col-12">
+        <div class="card card-statistic-1">
+            <div class="card-icon bg-warning">
+                <i class="far fa-file"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>Date</h4>
+                </div>
+                <div class="card-body" id="current-date">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+        <div class="card card-statistic-1">
+            <div class="card-icon bg-success">
+                <i class="fas fa-circle"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>Time</h4>
+                </div>
+                <div class="card-body" id="current-time">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-12 col-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Hourly Reading</h4>
+                <div class="card-header-action">
+                    <div class="btn-group">
+                        <a href="{% url 'core:get_readings_page' 'create' %}" class="btn btn-primary">Create</a>
+                        <a href="{% url 'core:get_readings_page' 'list' %}" class="btn">View</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="myChart" height="182"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12 col-12 col-sm-12">
+        <div class="card" style="padding-bottom:2.9rem;">
+            <div class="card-header">
+                <h4>132kV Stations Load Chart</h4>
+                <div class="card-header-action">
+                    <div class="btn-group">
+                        <button onclick="getChartReading()" class="btn btn-primary" id="refresh-station-load-button">Refresh</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <canvas id="myChart4"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-6 col-md-12 col-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Trouble Report (OF19)</h4>
+                <div class="card-header-action">
+                    <a data-collapse="#mycard-collapse1" class="btn btn-icon btn-primary text-white"><i
+                            class="fas fa-minus"></i></a>
+                </div>
+            </div>
+            <div class="collapse show" id="mycard-collapse1">
+                {% include 'core/partials/_collapsable_card.html' with reports=trouble_reports %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 col-md-12 col-12 col-sm-12">
+        <div class="card">
+            <div class="card-header">
+                <h4>Application For Protection Guarantee (OF1)</h4>
+                <div class="card-header-action">
+                    <a data-collapse="#mycard-collapse2" class="btn btn-icon btn-primary text-white"><i
+                            class="fas fa-minus"></i></a>
+                </div>
+            </div>
+            <div class="collapse show" id="mycard-collapse2">
+                {% include 'core/partials/_collapsable_card.html' with reports=protection_guarantees %}
+            </div>
+        </div>
+    </div>
+</div>
+{% if user.designation != '330' %}
+<div class="row">
+    {% include 'reports/operational_reports/operational_report_form.html' with form=operational_report_form %}
+</div>
+{% endif %} {% endblock content %}
+{% block js %}
+<script type="text/javascript" src="{% static 'assets/modules/simple-weather/jquery.simpleWeather.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/modules/jqvmap/dist/jquery.vmap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/modules/jqvmap/dist/maps/jquery.vmap.world.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/modules/summernote/summernote-bs4.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/modules/chocolat/dist/js/jquery.chocolat.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/modules/chart.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/page/modules-chartjs.js' %}"></script>
+<script type="text/javascript" src="{% static 'assets/js/page/index-0.js' %}"></script>
+<script type="text/javascript">
+    document.getElementById("phase").style.display = "none";
+    document.getElementById("frequency").style.display = "none";
+    $(".form-control").on('input', function() {
+        var reason = $("#id_reason").val();
+        if (reason === 'l/s') {
+            document.getElementById("frequency").style.display = "block";
+            document.getElementById("phase").style.display = "none";
+            $('#phase').val('');
+        } else if (reason === 'e/f' || reason === 'o/c' || reason === 'e/f&o/c') {
+            document.getElementById("phase").style.display = "block";
+            document.getElementById("frequency").style.display = "none";
+            $('#frequency').val('');
+        }
+    })
+</script>
+{% endblock js %}

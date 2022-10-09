@@ -1,0 +1,212 @@
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'assets/modules/bootstrap-social/bootstrap-social.css' %}"> {% endblock css %} {% block title %} 132kV Stations {% endblock title %} {% block content %}
+
+
+<div class="section-header">
+    <h1>Stations</h1>
+    <div class="section-header-breadcrumb">
+        <span class="ml-auto"> <a href="{% url 'feeders:list' single_station_132.slug %}">View Feeders</a></span>
+    </div>
+</div>
+
+<div class="section-body">
+    <button class="btn btn-secondary btn-sm" onclick="history.back()"> &#8592 Go Back</button>
+    <h2 class="section-title">132kV Station</h2>
+
+    <div class="row">
+        <div class="col-12 mb-4">
+            <div class="hero text-white hero-bg-image hero-bg-parallax image-center" style="background-image: url('{{single_station_132.image.url}}');">
+                <div class="hero-inner">
+                    <h2>{{single_station_132}}</h2>
+                    <div class="mt-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-lg-7">
+            <div class="card card-danger">
+                <div class="card-header">
+                    <h4>Operators</h4>
+                    {% if single_station_132.users %}
+                    <div class="card-header-action">
+                        <a href="{% url 'stations_132:users' single_station_132.pk %}" class="btn btn-danger btn-icon icon-right">View All <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="owl-carousel owl-theme" id="users-carousel">
+                        {% for user in users.all %}
+                        <div>
+                            <div class="user-item">
+                                {% if user.avatar %}
+                                <img width="10" height="2" alt="image" src="{{user.avatar.url}}" class="img-fluid rounded-circle">
+                                {% else %}
+                                <span class="bg-secondary w-0 p-2 text-center rounded-circle">{{ user.first_name.0 }}</span>
+                                {% endif %}
+                                <div class="user-details">
+                                    <div class="user-name"><a href="{{user.get_absolute_url}}">{{user.get_full_name}}</a></div>
+                                    <div class="text-job text-muted">IT Student</div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% else %}
+                <p>No Operators</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-lg-5">
+            <div class="card profile-widget">
+                <div class="profile-widget-header">
+                    <img alt="image" src="{{single_station_132.image.url}}" class="profile-widget-picture">
+                    <div class="profile-widget-items">
+                        <div class="profile-widget-item">
+                            <div class="profile-widget-item-label">Operators</div>
+                            <div class="profile-widget-item-value">{{single_station_132.get_total_users}}</div>
+                        </div>
+                        <div class="profile-widget-item">
+                            <div class="profile-widget-item-label">OF19</div>
+                            <div class="profile-widget-item-value">{{of19_count}}</div>
+                        </div>
+                        <div class="profile-widget-item">
+                            <div class="profile-widget-item-label">Feeders</div>
+                            <div class="profile-widget-item-value">{{single_station_132.get_feeders_count}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-widget-description pb-0">
+                    <div class="profile-widget-name">{{single_station_132}}</div>
+                    <p>Akinyemi Str., Ibadan, Oyo State, United African Republic</p>
+                </div>
+            </div>
+        </div>
+        {% if user.station_132 == single_station_132 or user.station_330 == single_station_132.station_330 %}
+        <div class="col-12 col-sm-12 col-lg-12 mb-3">
+            <div class='card'>
+                <div class="card-header">
+                    <h4>Trouble Reports (OF19)</h4>
+                    <span class="ml-auto"> 
+                        {% if user.station_330 == single_station_330 %}
+                        <a href="{% url 'troublereports:list' %}">View All</a>
+                        {% endif %}
+                    </span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Number</th>
+                            <th>Apparatus</th>
+                            <th>Author</th>
+                            <th>Created At</th>
+                            <th>Status</th>
+                        </tr>
+                        {% for trouble_report in single_station_132.trouble_reports.all|slice:"0:3" %}
+                        <tr>
+                            <td>{{trouble_report.number}}
+                                <div class="table-links">
+                                    <a target="_blank" href="{% url 'troublereports:detail' trouble_report.pk %}">View</a>
+                                    <div class="bullet"></div>
+                                    <a href="#">Edit</a>
+                                    <div class="bullet"></div>
+                                    <a href="#" class="text-danger">Trash</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div data-toggle="tooltip" data-html="true" data-title="{{trouble_report.apparatus_in_trouble|safe|slice:'0:40'}}">
+                                    {{trouble_report.apparatus_in_trouble|safe|slice:'0:30'}}</div>
+                            </td>
+                            <td>
+                                <a href="{{trouble_report.user.get_absolute_url}}">
+                                    {% if trouble_report.user.avatar %}
+                                    <img alt="image" src="{{trouble_report.user.avatar.url}}" class="rounded-circle"
+                                        width="35" data-toggle="title" title="">
+                                    {% else %}
+                                    <span
+                                        class="bg-info p-3 text-center rounded-circle">{{ trouble_report.user.first_name.0 }}</span>
+                                    {% endif %}
+                                    <div class="d-inline-block ml-1">{{trouble_report.user.get_full_name}}</div>
+                                </a>
+                            </td>
+                            <td>{{trouble_report.created_at}}</td>
+                            {% if trouble_report.acknowledged %}
+                            <td>
+                                <div class="badge badge-success" data-toggle="tooltip" data-html="true" data-title="{{trouble_report.acknowledged_by.get_full_name}}">Acknowledged</div>
+                            </td>
+                            {% else %}
+                            <td>
+                                <div class="badge badge-warning">Pending</div>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-12 col-lg-12 mb-5">
+            <div class='card'>
+                <div class="card-header">
+                    <h4>Application For Protection Guarantee (OF1)</h4>
+                    <span class="ml-auto">
+                        <a href="{% url 'protection_guarantees:list' %}">View All</a> 
+                    </span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Station</th>
+                            <th>Apparatus</th>
+                            <th>Author</th>
+                            <th>Created At</th>
+                            <th>Status</th>
+                        </tr>
+                        {% for protection_guarantee in single_station_132.protection_guarantees.all|slice:"0:3" %}
+                        <tr>
+                            <td>{{protection_guarantee.applied_to_132}}
+                                <div class="table-links">
+                                    <a target="_blank" href="{% url 'protection_guarantees:detail' protection_guarantee.pk %}">View</a>
+                                </div>
+                            </td>
+                            <td>
+                                <div data-toggle="tooltip" data-html="true" data-title="{{protection_guarantee.description_of_apparatus|safe|slice:'0:50'}}...">
+                                    {{protection_guarantee.description_of_apparatus|safe|slice:'0:35'}}...</div>
+                            </td>
+                            <td>
+                                <a href="#">
+                                    {% if protection_guarantee.user.avatar %}
+                                    <img alt="image" src="{{protection_guarantee.user.avatar.url}}"
+                                        class="rounded-circle" width="35" data-toggle="title" title="">
+                                    {% else %}
+                                    <span
+                                        class="bg-info p-3 text-center rounded-circle">{{ protection_guarantee.user.first_name.0 }}</span>
+                                    {% endif %}
+                                    <div class="d-inline-block ml-1">{{protection_guarantee.user.get_full_name}}</div>
+                                </a>
+                            </td>
+                            <td>{{protection_guarantee.created}}</td>
+                            {% if protection_guarantee.is_acknowledged %}
+                            <td>
+                                <div class="badge badge-success" data-toggle="tooltip" data-html="true" data-title="{{trouble_report.acknowledged_by.get_full_name}}">Acknowledged</div>
+                            </td>
+                            {% else %}
+                            <td>
+                                <div class="badge badge-warning">Pending</div>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+</div>
+</div>
+{% block js %}
+<script src="{% static 'assets/modules/owlcarousel2/dist/owl.carousel.min.js' %}"></script>
+<script src="{% static 'assets/js/page/components-user.js' %}"></script>
+{% endblock js %}
+{% endblock content %}

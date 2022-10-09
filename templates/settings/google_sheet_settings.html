@@ -1,0 +1,61 @@
+{% extends 'base.html' %} {% load static %}
+{% block title %} Settings {% endblock title %}
+{% block content %}
+<div class="section-header">
+    <div class="section-header-back">
+      <a onclick="history.back()" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+    </div>
+    <h1>Google Sheet Settings</h1>
+    <div class="section-header-breadcrumb">
+      <div class="breadcrumb-item active"><a href="{% url 'core:home' %}">Dashboard</a></div>
+      <div class="breadcrumb-item active"><a href="{% url 'settings:settings' %}">Settings</a></div>
+      <div class="breadcrumb-item">Google Sheet Settings</div>
+    </div>
+  </div>
+
+  <div class="section-body">
+    <h2 class="section-title">All About Google Settings</h2>
+    <p class="section-lead">
+      You can adjust all google settings here
+    </p>
+    <div id="output-status"></div>
+    <div class="row">
+      <div class="col-md-12 col-lg-12">
+          <div class="card" id="settings-card">
+            <div class="card-header">
+              <h4>Google Sheet Settings</h4>
+            </div>
+            <div class="card-body">
+                <div class="section-title">Google Sheet Id</div>
+                    <div class="row" id="google-sheet-display">
+                        {% for google_sheet in station.station_google_sheets.all %}
+                            <div class="col-12"> 
+                                <label>{{google_sheet.google_sheet_title}} <code>{{google_sheet.google_sheet_id}}</code></label>
+                            </div>
+                        {% endfor %}
+                    </div>
+                <form method="POST" id="GoogleSheetUpdate-form">
+                    {% csrf_token %}
+                    {% if station.hourly_readings %}
+                    <div class="form-group container">
+                      <div class="input-group">
+                        <select class="custom-select" id="google-sheet-id">
+                            <option selected>Choose...</option>
+                          {% for google_sheet in station.station_google_sheets.all %}
+                            <option value="{{google_sheet.pk}}">{{google_sheet.google_sheet_title}}</option>
+                          {% endfor %}
+                        </select>
+                        <input type="text" class="form-control" placeholder="Paste Google Sheet Url" id="google-sheet-url">
+                        <div class="input-group-append">
+                          <button class="btn btn-primary" type="submit">Save</button>
+                        </div>
+                      </div>
+                    </div>
+                    {% endif %}
+                </form>
+          </div>
+      </div>
+    </div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,51 @@
+{% extends 'base.html' %} {% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/modules/bootstrap-daterangepicker/daterangepicker.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/bootstrap-colorpicker/dist/css/bootstrap-colorpicker.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/select2/dist/css/select2.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/jquery-selectric/selectric.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/bootstrap-timepicker/css/bootstrap-timepicker.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/bootstrap-tagsinput/dist/bootstrap-tagsinput.css' %}">
+{% endblock css %}
+{% block title %} 330kV Stations {% endblock title %} {% block content %}
+
+
+<div class="section-header">
+    <div class="section-header-back">
+        <a href="{% url 'troublereports:list' %}" class="btn btn-icon"><i class="fas fa-arrow-left"></i></a>
+    </div>
+    <h1>Create New Trouble Report</h1>
+
+</div>
+
+<div class="section-body">
+    <h2 class="section-title">Create New Trouble Report</h2>
+    <p class="section-lead">
+        On this page you can create a new trouble report and fill in all fields.
+    </p>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Write Your Trouble Report</h4>
+                </div>
+                <div class="card-body">
+                    <form action={% url 'troublereports:create' %} method="POST">
+                        {% csrf_token %}
+                        {% if form.non_field_errors %}
+                        {% for error in form.non_field_errors %}
+                        <span class="text-danger font-medium text-sm">{{error}}</span>
+                        {% endfor %}
+                        {% endif %}
+                        {% include 'reports/troublereports/partials/trouble_report_form.html' with form=form cta='Create Trouble Report' %}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% block js %}
+<script src="{% static 'assets/js/page/forms-advanced-forms.js' %}"></script>
+<script src="{% static 'assets/modules/summernote/summernote-bs4.js' %}"></script>
+{% endblock js %} {% endblock content %}

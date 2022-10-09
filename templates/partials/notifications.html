@@ -1,0 +1,23 @@
+{% load static %}
+<li class="dropdown dropdown-list-toggle"><a id="notif-dropdown" href="#" onclick="reload_notification()" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg {% if notifications_not_seen_count >= 1 %}beep{% endif %}" id="notification-bell-link"><i class="far fa-bell"></i></a>
+    <div class="dropdown-menu dropdown-list dropdown-menu-right">
+        <div class="dropdown-header">Notifications
+            <div class="float-right">
+                <a href="{% url 'notifications:mark_all_as_read' %}">Mark All As Read</a>
+            </div>
+        </div>
+        <div class="dropdown-list-content dropdown-list-icons" id="notif-list">
+            {% if notifications %} {% for n in notifications %}
+            <a href="{% url 'notifications:set_as_seen' n.pk %}" class="dropdown-item">
+                <div class="dropdown-item-icon bg-success text-white ">
+                    <i class="fas fa-{{n.icon}}"></i>
+                </div>
+                <div class="dropdown-item-desc">
+                    <b class="{% if n.user_has_seen != True %}font-weight-bold text-success{% endif %}">{{n.text}}</b>
+                    <div class="time">{{n.created|timesince}} ago</div>
+                </div>
+            </a>
+            {% endfor %} {% endif %}
+        </div>
+    </div>
+</li>

@@ -1,0 +1,64 @@
+<div class="col-lg-12 col-md-12 col-12 col-sm-12">
+  <form method="POST" id='operational-form' class="needs-validation" novalidate="">
+    {% csrf_token %}
+    <div class="card">
+      <div class="card-header">
+        <h4>Operational Report</h4>
+      </div>
+      <div class="card-body pb-0">
+        <div class="row">
+          <div class="col">
+            <div class="form-group" id="from">
+              <label>From:</label>
+              {{form.from_time}}
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group" id="to">
+              <label>To:</label>
+              {{form.to_time}}
+            </div>
+          </div>
+        </div> 
+        <div class="form-group" id="feeder">
+          <label>Feeder:</label>
+          {{form.feeder}}
+        </div>
+        <div class="form-group" id="reason">
+          <label>Reason:</label>
+          {{form.reason}}
+        </div>
+        <div class="form-group" id="phase">
+          <label>Phase:</label>
+          {{form.phase}}
+        </div>
+        <div class="form-group" id="frequency">
+          <label>Frequency:</label>
+          {{form.frequency}}
+        </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-group" id="load_loss">
+              <label>{{form.load_loss.label}}:</label>
+              {{form.load_loss}}
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-group" id="dispatch">
+              <label>{{form.dispatch.label}}:</label>
+              {{form.dispatch}}
+            </div>
+          </div>
+        </div>
+        <div class="form-group" id="description">
+          <label>{{form.description.label}}:</label>
+          {{form.description}}
+        </div>
+      </div>
+      <div class="card-footer pt-0">
+        <button class="btn btn-primary">Send Report</button>
+      </div>
+    </div>
+  </form>
+</div>
+

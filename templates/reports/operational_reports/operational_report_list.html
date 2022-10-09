@@ -1,0 +1,90 @@
+{% extends 'base.html' %} {% load static %} {% block css %}
+<link rel="stylesheet" href="{% static 'assets/modules/prism/prism.css' %}"> {% endblock css %} {% block title %} Operational Report {% endblock title %} {% block content %}
+
+
+<div class="section-header">
+    <h1>Operational Report</h1>
+
+    <div class="section-header-button ml-auto">
+    </div>
+</div>
+<div class="section-body">
+    <h2 class="section-title">August 2022</h2>
+    <div class="row">
+        <div class="col-12">
+            <div class="activities">
+                {% for report in reports%}
+                <div class="activity">
+                    <div class="activity-icon bg-primary text-white shadow-primary">
+                        <i class="fas fa-comment-alt"></i>
+                    </div>
+                    <div class="activity-detail">
+                        <div class="mb-2">
+                            <span class="text-job text-primary">{{report.created|timesince}} ago</span>
+                            <span class="bullet"></span>
+                            <a class="text-job" href="{{report.user.get_absolute_url}}">{{report.user.get_full_name}}</a>
+                            <span class="bullet"></span>
+                            <a class="text-job" href="{{report.station_132.get_absolute_url}}">{{report.user.station_132}}</a>
+                            <div class="float-right dropdown">
+                                <a href="#" data-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></a>
+                                <div class="dropdown-menu">
+                                    <a href="{% url 'operational_reports:is_read' report.pk %}" class="dropdown-item has-icon text-primary" ><i class="fas fa-pen-alt"></i> Mark as read</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% if report.description %}
+                        <button data-toggle="tooltip" title="{{report.description}}" class="float-right btn-primary"><i class="fas fa-file"></i></button>
+                        {% endif %}
+                        <p>{{report.from_time}} Hrs - {{report.to_time}} Hrs</p>
+                        {% if report.is_read is True %}
+                        <strike><a href="{{report.feeder.get_absolute_url}}">{{report.feeder}}</a> feeder {{report.content}}.<span class="bullet"></span> Load Loss: {{report.load_loss}}MW</strike>
+                        {% else %}
+                        <p><a href="{{report.feeder.get_absolute_url}}">{{report.feeder}}</a> feeder {{report.content}}.<span class="bullet"></span> Load Loss: {{report.load_loss}}MW</p>
+                        {% endif%}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <nav aria-label="...">
+                {% if reports.has_other_pages %}
+                <ul class="pagination">
+                    {% if reports.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ reports.previous_page_number }}">Previous</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+                    {% endif %} 
+                    {% for i in reports.paginator.page_range %}
+                    {% if reports.number == i %}
+                    <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                    {% if reports.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ reports.next_page_number|add:"1" }}">{{ reports.next_page_number|add:"1" }}</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ reports.next_page_number }}">Next</a></li>
+                    {% else %}
+                    <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+                    {% endif %}
+                </ul>
+                {% endif %}
+              </nav>
+        </div>
+    </div>
+</div>
+</div>
+
+
+
+
+
+ {% endblock content %}
+
+{% block modal %}
+
+{% endblock modal %}
+
+{% block js %}
+<script src="{% static 'assets/modules/tooltip.js' %}"></script>
+<script src="{% static 'assets/modules/jquery-ui/jquery-ui.min.js' %}"></script>
+<script src="{% static 'assets/js/page/bootstrap-modal.js' %}"></script>
+<script src="{% static 'assets/modules/prism/prism.js' %}"></script>
+{% endblock js %}

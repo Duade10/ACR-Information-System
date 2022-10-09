@@ -1,0 +1,7 @@
+{% extends 'base.html' %} {% block title %} Edit Station {% endblock title %} {% block content %}
+
+<button onclick="history.back()">Go Back</button>
+{% include 'forms/post/form_object_data.html' with action='feeders:update' object_data=single_feeder.slug cta='Edit Feeder' form=form enctype='multipart/form-data' %}
+<br>
+{% endblock content %}
+

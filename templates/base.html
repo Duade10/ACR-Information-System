@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta content="text/html" charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
+
+    <!-- General CSS Files -->
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/bootstrap/css/bootstrap.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/fontawesome/css/all.min.css' %}">
+
+    <!-- CSS Libraries -->
+    {% block css %} {% endblock css %}
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/izitoast/css/iziToast.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/jqvmap/dist/jqvmap.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/summernote/summernote-bs4.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/owlcarousel2/dist/assets/owl.carousel.min.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/modules/owlcarousel2/dist/assets/owl.theme.default.min.css' %}">
+
+    <!-- Template CSS -->
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link type="text/css" rel="stylesheet" href="{% static 'assets/css/components.css' %}">
+    <!-- Start GA -->
+    <link type="text/css" rel="icon" type="image/x-icon" href="{% static 'assets/img/logo.png' %}">
+
+
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-94034622-3"></script>
+    <script type="text/javascript">
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-94034622-3');
+    </script>
+
+    <title>{% block title %} {% endblock title %} Control Room</title>
+</head>
+
+<body>
+    <div id="app">
+        <div class="main-wrapper main-wrapper-1">
+            {% include 'partials/_nav.html' %} {% include 'partials/_sidebar.html' %}
+            <div class="main-content">
+                <section class="section">
+                    <div class="container">
+                        {% include 'partials/alert.html' %}
+                        {% block content %} {% endblock content %}
+                </section>
+                </div>
+                {% block modal %}
+                {% endblock modal %}
+            </div>
+        </div>
+
+        <!-- General JS Scripts -->
+        <script type="text/javascript" src="{% static 'assets/modules/jquery.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/popper.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/tooltip.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/nicescroll/jquery.nicescroll.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/moment.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/stisla.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/izitoast/js/iziToast.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/page/modules-toastr.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/modules/sweetalert/sweetalert.min.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/page/modules-sweetalert.js' %}"></script>
+        <!-- JS Libraies -->
+
+        <script type="text/javascript">
+            function reload_notification() {
+                $('#notif-list').load(' #notif-list', function() {
+                    $(this).children().unwrap()
+                })
+            }
+        </script>
+        <script type="text/javascript">
+                setTimeout(function() {
+                    $('.alert').fadeOut('slow')
+                }, 3000)
+        </script>
+
+
+        <script type="text/javascript">
+            function successNotification(msg) {
+                iziToast.success({
+                    title: '{{request.user.get_full_name}}',
+                    message: msg,
+                    position: 'topRight'
+                });
+            }
+
+            function failNotification(msg) {
+                iziToast.error({
+                    title: '{{request.user.get_full_name}}',
+                    message: msg,
+                    position: 'topRight'
+                });
+            }
+
+            function displayNotification(title, name, station, time, for_a, time_from, time_to, url, stationId, station330Id) {
+                if (stationId === userStationId || station330Id === userStationId){
+                    swal({
+                        title: `${title.toUpperCase()}`,
+                        text: `${name} (${station}) filed ${for_a.toUpperCase()} to be issued today at ${time} - From ${time_from} Hrs to ${time_to} Hrs `,
+                        icon: 'info',
+                        buttons: true,
+                    })
+                    .then((willDisplay) => {
+                        if (willDisplay) {
+                        window.location.replace(url)
+                        
+                        } else {
+                        swal('Your imaginary file is safe!');
+                        }
+                      });
+                }
+            }            
+        </script>
+        <script type="text/javascript">
+            setInterval(function() {
+                var today = new Date();
+                var DD = String(today.getDate()).padStart(2, '0');
+                var MM = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var YYYY = today.getFullYear();
+                var hh = today.getHours();
+                var mm = today.getMinutes();
+                var ss = today.getSeconds();
+                document.getElementById("current-time").innerHTML = `${hh}:${mm}:${ss}`;
+                document.getElementById("current-date").innerHTML = `${YYYY}/${MM}/${DD}`;
+            }, 900)
+        </script>
+                <!-- Page Specific JS File -->
+                {% block js %} {% endblock js %}
+                <!-- Template JS File -->
+        <script type="text/javascript" src="{% static 'assets/js/scripts.js' %}"></script>
+        <script type="text/javascript" src="{% static 'assets/js/custom.js' %}"></script>
+        <script type="text/javascript">
+            if (Number.isInteger({{user.station_330.pk}}) === true){
+                var userStation330Id = '{{user.station_330.pk}}';
+            }else{
+                var userStation330Id = 0;
+            }
+            if (Number.isInteger({{user.station_132.pk}}) === true){
+                var userStation132Id = '{{user.station_132.pk}}';
+            }else{
+                var userStation132Id = 0;
+            }
+            let url = `ws://${window.location.host}/ws/socket-server/`
+            const socket = new WebSocket(url);
+            socket.onmessage = function(e) {
+                let data = JSON.parse(e.data);
+                if (parseInt(data.message) === parseInt(userStation330Id) || parseInt(data.message) === parseInt(userStation132Id)){
+                    $('#notif-dropdown').load(' #notif-dropdown', function() {
+                        $(this).children().unwrap()
+                    });
+                    
+                    if (data.reload_type === 'hourlyReading'){
+                        $('#hourly-reading').load(' #hourly-reading', function() {
+                            $(this).children().unwrap()
+                        });
+                        getHourlyReading();
+                    }
+
+                    if(data.reload_type === 'troubleReports'){
+                        $('#trouble-reports').load(' #trouble-reports', function() {
+                            $(this).children().unwrap()
+                        });
+                    }
+
+                    if (data.reload_type === 'protectionGuarantees'){
+                        $('#protection-guarantees').load(' #protection-guarantees', function() {
+                            $(this).children().unwrap()
+                        });
+                    }
+                }
+            }
+            socket.onclose = function(e) {
+                console.error('Socket closed unexpectedly');
+            };
+        </script>
+</body>
+
+</html>

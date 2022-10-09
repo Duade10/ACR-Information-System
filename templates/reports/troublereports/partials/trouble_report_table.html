@@ -1,0 +1,40 @@
+<tr>
+  <td>
+    <div class="custom-checkbox custom-control">
+      <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+      <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+    </div>
+  </td>
+  <td>{{report.number}}
+    <div class="table-links">
+      <a target="_blank" href="{% url 'troublereports:detail' report.pk %}">View</a>
+      {% if report.acknowledged == False %}
+      <div class="bullet"></div>
+      <a href="{% url 'troublereports:edit' report.pk %}">Edit</a>
+      <div class="bullet"></div>
+      <a href="#" class="text-danger">Trash</a>
+      {% endif %}
+    </div>
+  </td>
+  
+  <td><span data-toggle="tooltip" data-html="true" title="{{report.apparatus_in_trouble|safe|slice:'0:50'}}">{{report.apparatus_in_trouble|safe|slice:'0:30'}}</span></td>
+  
+  
+                        
+  {% if report.user.avatar %}
+  <td>
+    <img alt="image" src="{{report.user.avatar.url}}" class="rounded-circle" width="35" data-toggle="tooltip" title="{{report.user.get_full_name}}">
+  </td>
+  {% else %}
+  <td>
+    <span class="bg-info p-3 text-center rounded-circle" data-toggle="tooltip" title="{{report.user.get_full_name}}">{{ report.user.first_name.0 }}</span>
+  </td>
+  {% endif %}
+  <td>{{report.user.get_full_name}}</td>
+  <td>{{report.created}}</td>
+  {% if report.acknowledged %}
+  <td><div  data-toggle="tooltip" title="{{report.acknowledged_by.get_full_name}}" class="badge badge-success">Acknowledged</div></td>
+  {% else %}
+  <td><a href="{% url 'troublereports:acknowledge' report.pk %}" class="btn btn-sm btn-warning">Pending</a></td>
+   {% endif %}
+</tr>

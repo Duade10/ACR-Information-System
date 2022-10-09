@@ -1,0 +1,66 @@
+{% extends 'base-0.html' %}
+{% load static %}
+{% block title %} Login {% endblock title %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12 col-sm-8 offset-sm-2 col-md-6 offset-md-3 col-lg-6 offset-lg-3 col-xl-4 offset-xl-4">
+            <div class="login-brand">
+                <img src="{% static 'assets/img/logo.png' %}" alt="logo" width="100" class="shadow-light rounded-circle">
+            </div>
+
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h4>Login</h4>
+                </div>
+
+                <div class="card-body">
+                    {% if request.GET.command != 'verification' %}
+                    <form method="POST" action="{% url 'users:login' %}" class="needs-validation" novalidate="">
+                        {% csrf_token %}
+                        {% if form.errors %}
+                            <div class="text-danger text-center">
+                               Invalid Login Credentials
+                            </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="email">Email</label> {{form.email}}
+                            <div class="invalid-feedback">
+                                Please fill in your email
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="d-block">
+                                <label for="password" class="control-label">Password</label>
+                                <div class="float-right">
+                                    <a href="{% url 'users:forgot_password' %}" class="text-small">
+                                        Forgot Password?
+                                    </a>
+                                </div>
+                            </div>
+                            {{form.password}}
+                            <div class="invalid-feedback">
+                                Please fill in your password
+                            </div>
+                            
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block" tabindex="4">
+                                Login
+                            </button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <p class="bg-info text-white p-2 rounded shadow-md">Please confirm your email. An email has been sent to {{request.GET.email}}</p>
+                    {% endif %}
+                </div>
+                <p class="text-center">Don't have account? <a href="{% url 'users:sign_up' %}">Sign up</a></p>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock content %}

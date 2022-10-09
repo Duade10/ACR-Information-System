@@ -1,0 +1,326 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'assets/modules/datatables/datatables.min.css' %}">
+<link rel="stylesheet"
+  href="{% static 'assets/modules/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css' %}">
+<link rel="stylesheet" href="{% static 'assets/modules/datatables/Select-1.2.4/css/select.bootstrap4.min.css' %}">
+{% endblock css %}
+{% block title %} Application For Protection Guarantee (OF1) {% endblock title %}
+{% block content %}
+<div class="section-header">
+  <h1>Application For Protection Guarantee (OF1)</h1>
+  <div class="section-header-button ml-auto">
+    <a href="{% url 'protection_guarantees:create' %}" class="btn btn-primary">Add New</a>
+  </div>
+</div>
+
+<div class="section-body">
+
+  <h2 class="section-title">Application For Protection Guarantee (OF1)</h2>
+  <p class="section-lead">
+    You can manage all Application For Protection Guarantees, such as editing, deleting and more.
+  </p>
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-0">
+        <div class="card-body">
+          <div class="col-8">
+            <ul class="nav nav-pills" id="myTab3" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="home-tab3" data-toggle="tab" href="#all" role="tab" aria-controls="home"
+                  aria-selected="true">All <span class="badge badge-white">{{all_trouble_reports_count}}</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="profile-tab3" data-toggle="tab" href="#acknowledged" role="tab"
+                  aria-controls="profile" aria-selected="false">Acknowledged <span
+                    class="badge badge-primary">{{acknowledged_trouble_reports_count}}</span></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="contact-tab3" data-toggle="tab" href="#unacknowledged" role="tab"
+                  aria-controls="contact" aria-selected="false">Unacknowledged <span
+                    class="badge badge-primary">{{unacknowledged_trouble_reports_count}}</span></a>
+              </li>
+            </ul>
+          </div>
+          <div class="col-5 ml-auto">
+            <form action="{% url 'protection_guarantees:search_protection_guarantee' %}" class="search" method="GET">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search Database" name="keyword">
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+    <div class="col-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="clearfix mb-3"></div>
+          <div class="tab-content" id="myTabContent2">
+            <div class="tab-pane fade show active" id="all" role="tabpanel" aria-labelledby="home-tab3">
+              <div class="table-responsive">
+                <table class="table table-striped" id="table-2">
+                  <thead>
+                    <tr>
+                      <th class="text-center">
+                        <div class="custom-checkbox custom-control">
+                          <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                        </div>
+                      </th>
+                      <th></th>
+                      <th>Station</th>
+                      <th>Operator</th>
+                      <th>Name</th>
+                      <th>To Be Issued At</th>
+                      <th>Date Created</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="protection-guarantees">
+                    {% for report in reports %}
+                    <tr>
+                      <td>
+                        <div class="custom-checkbox custom-control">
+                          <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+                          <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                        </div>
+                      </td>
+                      <td>{{report.for_a|upper}}
+                        <div class="table-links">
+                          <a target="_blank" href="{% url 'protection_guarantees:detail' report.pk %}">View</a>
+                          {% if report.is_acknowledged == False %}
+                          <div class="bullet"></div>
+                          <a href="{% url 'protection_guarantees:update' report.pk %}">Edit</a>
+                          <div class="bullet"></div>
+                          <a href="#" class="text-danger">Trash</a>
+                          {% endif %}
+                        </div>
+                      </td>
+                      {% if report.applied_to_132 %}
+                      <td>{{report.applied_to_132}}</td>
+                      {% else %}
+                      <td>{{report.applied_to_330}}</td>
+                      {% endif %}
+                      {% if report.user.avatar %}
+                      <td>
+                        <img alt="image" src="{{report.user.avatar.url}}" class="rounded-circle" width="35"
+                          data-toggle="tooltip" title="{{report.user.get_full_name}}">
+                      </td>
+                      {% else %}
+                      <td>
+                        <span class="bg-info p-3 text-center rounded-circle" data-toggle="tooltip"
+                          title="{{report.user.get_full_name}}">{{ report.user.first_name.0 }}</span>
+                      </td>
+                      {% endif %}
+
+                      <td>{{report.user.get_full_name}}</td>
+                      <td>{{report.to_be_issued_at}}</td>
+                      <td>{{report.created}}</td>
+                      {% if report.is_acknowledged %}
+                      <td>
+                        <div data-toggle="tooltip" title="{{report.received_by_name}}" class="badge badge-success">
+                          Acknowledged</div>
+                      </td>
+                      {% else %}
+                      <td><a href="{% url 'protection_guarantees:acknowledge' report.pk %}"
+                          class="btn btn-sm btn-warning">Pending</a></td>
+                      {% endif %}
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="acknowledged" role="tabpanel" aria-labelledby="profile-tab3">
+              <div class="table-responsive">
+                <table class="table table-striped" id="table-2">
+                  <thead>
+                    <tr>
+                      <th class="text-center">
+                        <div class="custom-checkbox custom-control">
+                          <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                        </div>
+                      </th>
+                      <th></th>
+                      <th>Station</th>
+                      <th>Operator</th>
+                      <th>Name</th>
+                      <th>To Be Issued At</th>
+                      <th>Date Created</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="protection-guarantees">
+                    {% for report in reports %}
+                    {% if report.is_acknowledged %}
+                    <tr>
+                      <td>
+                        <div class="custom-checkbox custom-control">
+                          <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+                          <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                        </div>
+                      </td>
+                      <td>{{report.for_a|upper}}
+                        <div class="table-links">
+                          <a target="_blank" href="{% url 'protection_guarantees:detail' report.pk %}">View</a>
+                          {% if report.is_acknowledged == False %}
+                          <div class="bullet"></div>
+                          <a href="{% url 'protection_guarantees:update' report.pk %}">Edit</a>
+                          <div class="bullet"></div>
+                          <a href="#" class="text-danger">Trash</a>
+                          {% endif %}
+                        </div>
+                      </td>
+                      {% if report.applied_to_132 %}
+                      <td>{{report.applied_to_132}}</td>
+                      {% else %}
+                      <td>{{report.applied_to_330}}</td>
+                      {% endif %}
+                      {% if report.user.avatar %}
+                      <td>
+                        <img alt="image" src="{{report.user.avatar.url}}" class="rounded-circle" width="35"
+                          data-toggle="tooltip" title="{{report.user.get_full_name}}">
+                      </td>
+                      {% else %}
+                      <td>
+                        <span class="bg-info p-3 text-center rounded-circle" data-toggle="tooltip"
+                          title="{{report.user.get_full_name}}">{{ report.user.first_name.0 }}</span>
+                      </td>
+                      {% endif %}
+                      <td>{{report.user.get_full_name}}</td>
+                      <td>{{report.to_be_issued_at}}</td>
+                      <td>{{report.created}}</td>
+                      {% if report.is_acknowledged %}
+                      <td>
+                        <div data-toggle="tooltip" title="{{report.received_by_name}}" class="badge badge-success">
+                          Acknowledged</div>
+                      </td>
+                      {% else %}
+                      <td>
+                        <a href="{% url 'protection_guarantees:acknowledge' report.pk %}" class="btn btn-sm btn-warning">Pending</a>
+                      </td>
+                      {% endif %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="tab-pane fade" id="unacknowledged" role="tabpanel" aria-labelledby="contact-tab3">
+              <div class="table-responsive">
+                <table class="table table-striped" id="table-2">
+                  <thead>
+                    <tr>
+                      <th class="text-center">
+                        <div class="custom-checkbox custom-control">
+                          <label for="checkbox-all" class="custom-control-label">&nbsp;</label>
+                        </div>
+                      </th>
+                      <th></th>
+                      <th>Station</th>
+                      <th>Operator</th>
+                      <th>Name</th>
+                      <th>To Be Issued At</th>
+                      <th>Date Created</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody id="protection-guarantees">
+                    {% for report in reports %}
+                    {% if report.is_acknowledged == False %}
+                    <tr>
+                      <td>
+                        <div class="custom-checkbox custom-control">
+                          <input type="checkbox" data-checkboxes="mygroup" class="custom-control-input" id="checkbox-1">
+                          <label for="checkbox-1" class="custom-control-label">&nbsp;</label>
+                        </div>
+                      </td>
+                      <td>{{report.for_a|upper}}
+                        <div class="table-links">
+                          <a target="_blank" href="{% url 'protection_guarantees:detail' report.pk %}">View</a>
+                          <div class="bullet"></div>
+                          <a href="{% url 'protection_guarantees:update' report.pk %}">Edit</a>
+                          <div class="bullet"></div>
+                          <a href="#" class="text-danger">Trash</a>
+                        </div>
+                      </td>
+                      {% if report.applied_to_132 %}
+                      <td>{{report.applied_to_132}}</td>
+                      {% else %}
+                      <td>{{report.applied_to_330}}</td>
+                      {% endif %}
+                      {% if report.user.avatar %}
+                      <td>
+                        <img alt="image" src="{{report.user.avatar.url}}" class="rounded-circle" width="35"
+                          data-toggle="tooltip" title="{{report.user.get_full_name}}">
+                      </td>
+                      {% else %}
+                      <td>
+                        <span class="bg-info p-3 text-center rounded-circle" data-toggle="tooltip"
+                          title="{{report.user.get_full_name}}">{{ report.user.first_name.0 }}</span>
+                      </td>
+                      {% endif %}
+                      <td>{{report.user.get_full_name}}</td>
+                      <td>{{report.to_be_issued_at}}</td>
+                      <td>{{report.created}}</td>
+                      {% if report.is_acknowledged %}
+                      <td>
+                        <div data-toggle="tooltip" title="{{report.received_by_name}}" class="badge badge-success">
+                          Acknowledged</div>
+                      </td>
+                      {% else %}
+                      <td><a href="{% url 'protection_guarantees:acknowledge' report.pk %}"
+                          class="btn btn-sm btn-warning">Pending</a></td>
+                      {% endif %}
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <nav aria-label="...">
+        {% if reports.has_other_pages %}
+        <ul class="pagination">
+          {% if reports.has_previous %}
+          <li class="page-item"><a class="page-link" href="?page={{ reports.previous_page_number }}">Previous</a></li>
+          {% else %}
+          <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+          {% endif %} {% for i in reports.paginator.page_range %} {% if reports.number == i %}
+          <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+          {% endif %} {% endfor %} {% if reports.has_next %}
+          <li class="page-item"><a class="page-link" href="?page={{ reports.next_page_number|add:'1'}}">
+              {{reports.next_page_number|add:"1" }}</a></li>
+          <li class="page-item"><a class="page-link" href="?page={{ reports.next_page_number }}">Next</a></li>
+          {% else %}
+          <li class="page-item disabled"><a class="page-link" href="#">Next</a></li>
+          {% endif %}
+        </ul>
+        {% endif %}
+      </nav>
+    </div>
+  </div>
+
+</div>
+{% block js %}
+<script src="{% static 'assets/modules/tooltip.js' %}"></script>
+<script src="{% static 'assets/modules/datatables/datatables.min.js' %}"></script>
+<script src="{% static 'assets/modules/datatables/DataTables-1.10.16/js/dataTables.bootstrap4.min.js' %}"></script>
+<script src="{% static 'assets/modules/datatables/Select-1.2.4/js/dataTables.select.min.js' %}"></script>
+<script src="{% static 'assets/modules/jquery-ui/jquery-ui.min.js' %}"></script>
+<script src="{% static 'assets/js/page/modules-datatables.js' %}"></script>
+{% endblock js %}
+{% endblock content %}

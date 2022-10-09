@@ -1,0 +1,14 @@
+<div class="card-body">
+    {% for report in reports %}
+    <li class="media">
+        <img class="mr-3 rounded-circle" width="50" src="{{ report.user.avatar.url }}" alt="avatar">
+        <div class="media-body">
+            <div class="float-right text-primary">{{report.created|timesince}} ago</div>
+            <div class="media-title">{{report.user_name}}</div>
+            {% if report.apparatus_in_trouble %}
+            <span class="text-small text-muted">{{report.apparatus_in_trouble|safe}}</span> {% else %}
+            <span class="text-small text-muted">{{report.description_of_apparatus|safe|slice:':25'}}...</span> {% endif %}
+        </div>
+    </li>
+    {% endfor %}
+</div>

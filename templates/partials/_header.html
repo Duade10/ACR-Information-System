@@ -1,0 +1,11 @@
+<ul>
+    <li><a href="{% url 'core:home' %}">Home</a></li>
+    <li><a href="{% url 'stations_330:list' %}">330kV Stations</a></li>
+    <li><a href="{% url 'stations_132:list' %}">132kV Stations</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'users:logout' %}">Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'users:login' %}">Login</a></li>
+    <li><a href="{% url 'users:sign_up' %}">Sign Up</a></li>
+    {% endif %}
+</ul>

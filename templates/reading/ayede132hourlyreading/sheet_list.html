@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% load static %} {% block title %} Ayede 132 Reading Sheet {% endblock title %} {% block content %}
+
+
+<div class="section-header">
+    <h1>Reading Sheets</h1>
+    <span class="ml-auto"><a href="">Add Sheet</a></span>
+</div>
+<div class="section-body">
+    <button class="btn btn-secondary btn-sm" onclick="history.back()"> &#8592 Go Back</button>
+    <h2 class="section-title">Reading Sheets</h2>
+    <div class="row">
+        {% for sheet in reading_sheets %}
+        <div class="col-6 col-md-6 col-lg-6">
+            <div class="card card-primary">
+                <div class="card-header">
+                    <h4>Reading Sheet</h4>
+                    <div class="card-header-action">
+                        <a href="{{sheet.get_absolute_url}}" class="btn btn-primary">
+                            View
+                        </a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <p>{{sheet}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock content %}
